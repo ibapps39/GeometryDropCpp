@@ -35,11 +35,10 @@ void MovePlayer(Player &player, const float units)
 }
 
 // Player jump mechanic based on key press
-void PlayerJump(Player &player, const float jumpHeight)
+void PlayerJump(Player &player, const float jumpHeight, Vector3& ground)
 {
-    const float ground = 0;
     bool canJump = player.playerPOS.y < jumpHeight;
-    bool canFall = player.playerPOS.y > ground;
+    bool canFall = player.playerPOS.y > ground.y;
 
     if (IsKeyDown(KEY_SPACE) && canJump)
     {

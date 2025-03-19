@@ -126,7 +126,12 @@ void DrawPlayer(const Player &player);
 // Player Movement and Interaction
 void MoveCamera(Camera3D &camera);
 void MovePlayer(Player &player, const float units);
-void PlayerJump(Player &player, const float jumpHeight);
+void PlayerJump(Player &player, const float jumpHeight, Vector3& ground);
 
 void UpdateCameraSettingsRuntime(Camera3D& camera, CameraSettings& settings);
+
+// MASTER
+void InitGame(void);
+void Contain(Vector3& target, Vector3& BOX, Vector3& ground);
+
 

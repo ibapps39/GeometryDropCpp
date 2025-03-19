@@ -89,3 +89,17 @@ void UpdateCameraSettingsRuntime(Camera3D& camera, CameraSettings& settings)
         100, 260, 25, BLACK);
         DrawText(TextFormat("FOV f key: %.2f\n", settings.camFOVY), 100, 290, 25, BLACK);
 }
+
+void Contain(Vector3& target, Vector3& BOX, Vector3& ground)
+{
+    // BOTTOM
+    if (target.x < BOX.x) {
+        target.x = ground.x+3;
+    }
+    if (target.y < BOX.y) {
+        target.y = ground.y+3;
+    }
+    if (target.z < BOX.z) {
+        target.z = ground.z+3;
+    }
+}
