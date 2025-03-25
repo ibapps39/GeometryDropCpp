@@ -126,7 +126,7 @@ void IncreaseCameraTargetZ(Camera3D& camera, int amount);
 
 // Game Info
 float playersDist(const Player &player, const Player &opponent);
-adjustedMessage2D adjustMessage(const worldMessage &details);
+adjustedMessage2D AdjustMessage(const worldMessage &details);
 void debugDisplay(Player player, Camera& camera);
 
 // Draw Player
@@ -140,5 +140,5 @@ void PlayerJump(Player &player, const float jumpHeight, const float fallSpeed, V
 void UpdateCameraSettingsRuntime(Camera3D& camera, CameraSettings& settings);
 
 // MASTER
-void Contain(Vector3& target, Vector3& ground);
-void blockTest(BlockEntity& block, Player& player, const Vector3 InitialPOS, unsigned char t);
+void GroundFallThroughProtection(Vector3& player, Vector3& GROUND, int GROUND_OFFSET);
+void BlockTest(BlockEntity& block, Player& player, const Vector3 InitialPOS, unsigned char t);

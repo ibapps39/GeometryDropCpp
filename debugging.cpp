@@ -1,14 +1,53 @@
+#pragma once
 #include "main.hpp"
-// Initializes camera properties based on settings
-void InitCamera(Camera3D &camera, const CameraSettings &cameraSettings)
+void UpdateCameraSettingsRuntime(Camera3D& camera, CameraSettings& settings)
 {
-    camera.position = cameraSettings.camPosition;
-    camera.target = cameraSettings.camTarget;
-    camera.up = cameraSettings.camUp;
-    camera.fovy = cameraSettings.camFOVY;
-    camera.projection = cameraSettings.camProjection;
+    // Check for input to modify camera settings
+        // Position adjustments
+        if (IsKeyDown(KEY_X)) settings.camPosition.x += GetFrameTime() * 10.0f;
+        if (IsKeyDown(KEY_LEFT_SHIFT) && IsKeyDown(KEY_X)) settings.camPosition.x -= GetFrameTime() * 10.0f;
+        
+        if (IsKeyDown(KEY_Y)) settings.camPosition.y += GetFrameTime() * 10.0f;
+        if (IsKeyDown(KEY_LEFT_SHIFT) && IsKeyDown(KEY_Y)) settings.camPosition.y -= GetFrameTime() * 10.0f;
+        
+        if (IsKeyDown(KEY_Z)) settings.camPosition.z += GetFrameTime() * 10.0f;
+        if (IsKeyDown(KEY_LEFT_SHIFT) && IsKeyDown(KEY_Z)) settings.camPosition.z -= GetFrameTime() * 10.0f;
+        
+        // Target adjustments
+        if (IsKeyDown(KEY_U)) settings.camTarget.x += GetFrameTime() * 10.0f;
+        if (IsKeyDown(KEY_LEFT_SHIFT) && IsKeyDown(KEY_U)) settings.camTarget.x -= GetFrameTime() * 10.0f;
+        
+        if (IsKeyDown(KEY_I)) settings.camTarget.y += GetFrameTime() * 10.0f;
+        if (IsKeyDown(KEY_LEFT_SHIFT) && IsKeyDown(KEY_I)) settings.camTarget.y -= GetFrameTime() * 10.0f;
+        
+        if (IsKeyDown(KEY_O)) settings.camTarget.z += GetFrameTime() * 10.0f;
+        if (IsKeyDown(KEY_LEFT_SHIFT) && IsKeyDown(KEY_O)) settings.camTarget.z -= GetFrameTime() * 10.0f;
+        
+        // FOV adjustments
+        if (IsKeyDown(KEY_F)) settings.camFOVY += GetFrameTime() * 20.0f;
+        if (IsKeyDown(KEY_LEFT_SHIFT) && IsKeyDown(KEY_F)) settings.camFOVY -= GetFrameTime() * 20.0f;
+        
+        DrawText(TextFormat("Current Camera Settings:\n"), 100, 200, 25, BLACK);
+        DrawText(TextFormat("Position: +/- xyz keys {%.2f, %.2f, %.2f}\n", settings.camPosition.x, settings.camPosition.y, settings.camPosition.z), 
+        100, 230, 25, BLACK);
+        DrawText(TextFormat("Target: uio keys {%.2f, %.2f, %.2f}\n", settings.camTarget.x, settings.camTarget.y, settings.camTarget.z), 
+        100, 260, 25, BLACK);
+        DrawText(TextFormat("FOV f key: %.2f\n", settings.camFOVY), 100, 290, 25, BLACK);
 }
-
+void DisplayPoints(Vector3 &pos, int points, int fontSize, bool reset)
+{
+    const char *pointText = TextFormat("+%i", points);
+    int textWidth = MeasureText(pointText, fontSize);
+    static unsigned char alpha = 255;
+    for (size_t i = 255; i >= 0; i--)
+    {
+        DrawText(pointText, pos.x - textWidth / 2, pos.y, fontSize, {255, 255, 255, alpha});
+    }
+    if (reset)
+    {
+        alpha = 255;
+    }
+}
 // Handles camera mode switch based on key press
 void CameraTests(Camera &camera)
 {
@@ -87,52 +126,4 @@ void DrawCameraInfo(const Camera3D &camera, const Player &player)
     DrawText("LEFT/RIGHT BRACKET for CAM SWITCH", 50, 250, 10, RED);
     GetCameraProjectionInfo(const_cast<Camera &>(camera));
     GetPlayerInfo(player);
-}
-
-// Updates camera position based on player position
-void UpdatePlayerCamera(Player &player, Camera3D &camera)
-{
-    camera.position = {};
-    camera.target = {};
-}
-
-// Resets the camera to its default position and settings
-void ResetCamera(Camera3D &camera, CameraSettings camSettings)
-{
-    camera.position = camSettings.camPosition;
-    camera.target = camSettings.camTarget;
-    camera.up = camSettings.camUp;
-    camera.fovy = camSettings.camFOVY;
-}
-void ResetCamera(Camera3D* camera, CameraSettings camSettings)
-{
-    camera->position = camSettings.camPosition;
-    camera->target = camSettings.camTarget;
-    camera->up = camSettings.camUp;
-    camera->fovy = camSettings.camFOVY;
-}
-void IncreaseCameraPOSX(Camera3D& camera, int amount)
-{
-    camera.position.x++;
-}
-void IncreaseCameraPOSY(Camera3D& camera, int amount)
-{
-    camera.position.y++;
-}
-void IncreaseCameraPOSZ(Camera3D& camera, int amount)
-{
-    camera.position.z++;
-}
-
-void IncreaseCameraTargetX(Camera3D& camera, int amount)
-{
-    camera.target.x++;
-}
-void IncreaseCameraTargetY(Camera3D& camera, int amount)
-{
-    camera.target.y++;
-}
-void IncreaseCameraTargetZ(Camera3D& camera, int amount)
-{
-    camera.target.z++;
 }

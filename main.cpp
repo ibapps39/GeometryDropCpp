@@ -8,6 +8,8 @@ int main()
     const Vector3 ORIGIN = {0.0f, 0.0f, 0.0f};
 
     Vector3 GROUND = {0,0,0};
+    int GROUND_OFFSET = 3;
+
     // GetFrameTime()*1000 == 16 < GetFrameTime()*1000  < 17
     const float jumpHeight = 6.0f;  // Moved out of player initialization
     const float fallSpeed = 0.5;
@@ -48,8 +50,8 @@ int main()
         if (lockMouse > 0) { camera.target = {0,0,-90}; lockMouse--;} // Lock Mouse should be a function
         UpdateCamera(&camera, CAMERA_FIRST_PERSON);
         camera.position = player.playerPOS;
-        Contain(player.playerPOS, GROUND);
-        blockTest(block, player, block.blockInitialPosition, blockTimer);
+        GroundFallThroughProtection(player.playerPOS, GROUND, GROUND_OFFSET);
+        BlockTest(block, player, block.blockInitialPosition, blockTimer);
 
         
         //Contain(camera.position, BOX, GROUND);
