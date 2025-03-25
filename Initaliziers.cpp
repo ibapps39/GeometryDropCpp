@@ -88,8 +88,3 @@ Player CreatePlayer(Player player, PlayerSettings playerSettings)
     InitPlayer(player, playerSettings);
     return player;
 }
-void InitGame()
-{
-    
-
-}

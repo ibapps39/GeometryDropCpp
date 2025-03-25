@@ -2,18 +2,18 @@
 
 int main()
 {
+    
     const int screenWidth = GetScreenWidth();
     const int screenHeight = GetScreenHeight();
     const Vector3 ORIGIN = {0.0f, 0.0f, 0.0f};
-    Vector3 BOX = {2000, 2000, 1000};
+
     Vector3 GROUND = {0,0,0};
-
     // GetFrameTime()*1000 == 16 < GetFrameTime()*1000  < 17
-
     const float jumpHeight = 6.0f;  // Moved out of player initialization
+    const float fallSpeed = 0.5;
     const float playerSpeed = 30.0; // in pixels
 
-    InitWindow(1000, 1000, "3D Test");
+    InitWindow(FRAME_X, FRAME_Y, "3D Test");
     SetTargetFPS(FRAME_RATE);
     
     // Initial Camera Settings
@@ -25,17 +25,33 @@ int main()
         .camUp = {0,1,0},
         .camTarget = {0,20,0}
     };
+    Vector3 InitialPOS = {-20, 2, -20};
+    BlockEntity block {
+        .size = 5,
+        .blockColor = BLACK,
+        .blockInitialPosition = InitialPOS,
+        .blockPreviousPosition = InitialPOS,
+        .blockCurrentPosition = InitialPOS
+    };
 
     Camera3D camera = Create3DCamera(initCameraSettings);
 
     Player player = CreatePlayer();
     player.playerPOS = {0, 3, 0};
     camera.target = {0,0,-90};
+
+    static int lockMouse = 100; 
+    static unsigned char blockTimer = 0;
     while (!WindowShouldClose())
     {
+        blockTimer++;
+        if (lockMouse > 0) { camera.target = {0,0,-90}; lockMouse--;} // Lock Mouse should be a function
         UpdateCamera(&camera, CAMERA_FIRST_PERSON);
         camera.position = player.playerPOS;
-        //Contain(player.playerPOS, BOX, GROUND);
+        Contain(player.playerPOS, GROUND);
+        blockTest(block, player, block.blockInitialPosition, blockTimer);
+
+        
         //Contain(camera.position, BOX, GROUND);
         if (player.playerPOS.y <= 0) player.playerPOS.y = 1;
 
@@ -47,9 +63,12 @@ int main()
         // if (IsKeyPressed(KEY_Z)) IncreaseCameraTargetZ(camera, 1.0);
 
         if (IsKeyPressed(KEY_Q)) camera.target = {0,0,-90};
+        if (IsKeyPressed(KEY_Q) && IsKeyPressed(KEY_LEFT_SHIFT)) {
+            camera.target = {0,0,-90}; player.playerPOS = initCameraSettings.camPosition;
+        }
 
         MovePlayer(player, 30);
-        PlayerJump(player, 10, GROUND);
+        PlayerJump(player, jumpHeight, fallSpeed, GROUND);
         
         if (IsKeyPressed(KEY_Q)) {}
         // Eh, maybe later interpolate between points and movement in MovePlayer
@@ -62,12 +81,11 @@ int main()
         
         BeginMode3D(camera);
         // CAMERA FEED STARTS HERE
-        DrawCylinder({0,-90,0}, BOX.x, BOX.y, BOX.z, 100, BLUE); // NORTH
         DrawPlayer(player);
         DrawCylinder({0,-10,0}, 20, 20, 1.0, 100, MAGENTA); // FLOOR
         DrawCylinder({0,20,0}, 20, 20, 1.0, 100, GREEN); // ROOF
         DrawCylinder({0,1,-90}, 20, 20, 10.0, 100, PINK); // NORTH
-        
+        DrawCube(block.blockCurrentPosition, block.size, block.size, block.size, block.blockColor);
         
 
          // CAMERA FEED ENDS HERE

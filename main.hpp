@@ -6,6 +6,8 @@
 
 // Constants
 #define FRAME_RATE 60
+#define FRAME_X 800
+#define FRAME_Y 800
 
 // PROTOTYPE
 #if __cplusplus >= 202302L // C++23
@@ -47,6 +49,13 @@ typedef struct
     Vector3 playerVelocity;          // Store velocity vector
 } PlayerSettings;
 
+typedef struct BlockEntity {
+    unsigned char size;
+    Color blockColor;
+    const Vector3 blockInitialPosition;
+    Vector3 blockPreviousPosition;
+    Vector3 blockCurrentPosition;
+} BlockEntity;
 
 // Camera settings for player and its camera
 typedef struct
@@ -126,12 +135,10 @@ void DrawPlayer(const Player &player);
 // Player Movement and Interaction
 void MoveCamera(Camera3D &camera);
 void MovePlayer(Player &player, const float units);
-void PlayerJump(Player &player, const float jumpHeight, Vector3& ground);
+void PlayerJump(Player &player, const float jumpHeight, const float fallSpeed, Vector3& ground);
 
 void UpdateCameraSettingsRuntime(Camera3D& camera, CameraSettings& settings);
 
 // MASTER
-void InitGame(void);
-void Contain(Vector3& target, Vector3& BOX, Vector3& ground);
-
-
+void Contain(Vector3& target, Vector3& ground);
+void blockTest(BlockEntity& block, Player& player, const Vector3 InitialPOS, unsigned char t);

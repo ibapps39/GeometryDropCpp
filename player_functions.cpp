@@ -16,7 +16,7 @@ void MovePlayer(Player &player, const float units)
     {
         deltaOffset *= 2;
     }
-    if (IsKeyDown(KEY_W))
+    if (IsKeyDown(KEY_W)) 
     {
         player.playerPOS.z -= deltaOffset;
     }
@@ -35,17 +35,17 @@ void MovePlayer(Player &player, const float units)
 }
 
 // Player jump mechanic based on key press
-void PlayerJump(Player &player, const float jumpHeight, Vector3& ground)
+void PlayerJump(Player &player, const float jumpHeight, const float fallSpeed, Vector3& ground)
 {
     bool canJump = player.playerPOS.y < jumpHeight;
     bool canFall = player.playerPOS.y > ground.y;
 
     if (IsKeyDown(KEY_SPACE) && canJump)
     {
-        player.playerPOS.y += 0.5f;
+        player.playerPOS.y += fallSpeed;
     }
-    else if (canFall)
+    else if (canFall && player.playerPOS.y - fallSpeed > 1)
     {
-        player.playerPOS.y -= 0.05f;
+        player.playerPOS.y -= fallSpeed;
     }
 }
