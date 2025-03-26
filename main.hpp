@@ -35,8 +35,8 @@ typedef struct
     double playerScore;
     const char* playerName;
     Camera3D playerCamera;
-    Vector3 previousPOS;       // Store previous position
-    Vector3 velocity;          // Store velocity vector
+    Vector3 previousPOS;    // Store previous position
+    Vector3 velocity;       // Store velocity vector
 } Player;
 
 typedef struct
@@ -127,7 +127,8 @@ void IncreaseCameraTargetZ(Camera3D& camera, int amount);
 // Game Info
 float playersDist(const Player &player, const Player &opponent);
 adjustedMessage2D AdjustMessage(const worldMessage &details);
-void debugDisplay(Player player, Camera& camera);
+void debugPlayer(Player player, Camera& camera);
+void displayDebugText(const char* dtext, Camera& camera);
 
 // Draw Player
 void DrawPlayer(const Player &player);
@@ -140,5 +141,6 @@ void PlayerJump(Player &player, const float jumpHeight, const float fallSpeed, V
 void UpdateCameraSettingsRuntime(Camera3D& camera, CameraSettings& settings);
 
 // MASTER
-void GroundFallThroughProtection(Vector3& player, Vector3& GROUND, int GROUND_OFFSET);
+void GroundCollision(Vector3& player, Vector3& GROUND, int GROUND_OFFSET);
 void BlockTest(BlockEntity& block, Player& player, const Vector3 InitialPOS, unsigned char t);
+void BlockCollision(BlockEntity& block, Vector3& p, float fallSpeed);

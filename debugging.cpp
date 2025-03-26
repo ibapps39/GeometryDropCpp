@@ -127,3 +127,17 @@ void DrawCameraInfo(const Camera3D &camera, const Player &player)
     GetCameraProjectionInfo(const_cast<Camera &>(camera));
     GetPlayerInfo(player);
 }
+
+void debugDisplay(const char* dtext, Camera& camera)
+{
+    // Vector3& cpos = camera.position;
+    // Vector3 tpos = 
+    // {
+    //     cpos.x,
+    //     cpos.y,
+    //     cpos.z
+    // };
+    // Vector2 wpos = GetWorldToScreen(tpos, camera);
+    //int t_int = MeasureText(dtext, 20);
+    DrawText(TextFormat("%s", dtext), 100, 100, 20, BLACK);
+}

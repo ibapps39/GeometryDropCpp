@@ -42,6 +42,7 @@ void InitZeroPlayer(Player& player)
     player.playerCamera = {0};
     player.playerScore = 0.00;
     player.previousPOS = {0};
+    player.playerPOS = {0};
     player.velocity = {0};
 }
 void InitPlayer(Player& player, PlayerSettings settings)
@@ -49,6 +50,7 @@ void InitPlayer(Player& player, PlayerSettings settings)
     player.playerName = settings.playerName;
     player.playerCamera = settings.playerCamera;
     player.playerScore = settings.playerScore;
+    player.playerPOS = settings.playerPOS;
     player.previousPOS = settings.playerPOS;
     player.velocity = settings.playerVelocity;
 }

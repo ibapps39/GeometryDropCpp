@@ -11,7 +11,7 @@ int main()
     int GROUND_OFFSET = 3;
 
     // GetFrameTime()*1000 == 16 < GetFrameTime()*1000  < 17
-    const float jumpHeight = 6.0f;  // Moved out of player initialization
+    const float jumpHeight = 10.0f;  // Moved out of player initialization
     const float fallSpeed = 0.5;
     const float playerSpeed = 30.0; // in pixels
 
@@ -27,20 +27,21 @@ int main()
         .camUp = {0,1,0},
         .camTarget = {0,20,0}
     };
-    Vector3 InitialPOS = {-20, 2, -20};
-    BlockEntity block {
-        .size = 5,
-        .blockColor = BLACK,
-        .blockInitialPosition = InitialPOS,
-        .blockPreviousPosition = InitialPOS,
-        .blockCurrentPosition = InitialPOS
-    };
 
     Camera3D camera = Create3DCamera(initCameraSettings);
 
     Player player = CreatePlayer();
     player.playerPOS = {0, 3, 0};
     camera.target = {0,0,-90};
+
+    Vector3 BlockInitialPOS = {0, -2, -10};
+    BlockEntity block {
+        .size = 5,
+        .blockColor = BLACK,
+        .blockInitialPosition = BlockInitialPOS,
+        .blockPreviousPosition = BlockInitialPOS,
+        .blockCurrentPosition = BlockInitialPOS
+    };
 
     static int lockMouse = 100; 
     static unsigned char blockTimer = 0;
@@ -50,32 +51,19 @@ int main()
         if (lockMouse > 0) { camera.target = {0,0,-90}; lockMouse--;} // Lock Mouse should be a function
         UpdateCamera(&camera, CAMERA_FIRST_PERSON);
         camera.position = player.playerPOS;
-        GroundFallThroughProtection(player.playerPOS, GROUND, GROUND_OFFSET);
-        BlockTest(block, player, block.blockInitialPosition, blockTimer);
+        GroundCollision(player.playerPOS, GROUND, GROUND_OFFSET);
+        //BlockTest(block, player, block.blockInitialPosition, blockTimer);
+        BlockCollision(block, player.playerPOS, fallSpeed);
 
         
         //Contain(camera.position, BOX, GROUND);
         if (player.playerPOS.y <= 0) player.playerPOS.y = 1;
-
-        // if (IsKeyPressed(KEY_X)) IncreaseCameraPOSX(camera, 1.0);
-        // if (IsKeyPressed(KEY_Y)) IncreaseCameraPOSY(camera, 1.0);
-        // if (IsKeyPressed(KEY_Z)) IncreaseCameraPOSZ(camera, 1.0);
-        // if (IsKeyPressed(KEY_X)) IncreaseCameraTargetX(camera, 1.0);
-        // if (IsKeyPressed(KEY_Y)) IncreaseCameraTargetY(camera, 1.0);
-        // if (IsKeyPressed(KEY_Z)) IncreaseCameraTargetZ(camera, 1.0);
-
         if (IsKeyPressed(KEY_Q)) camera.target = {0,0,-90};
         if (IsKeyPressed(KEY_Q) && IsKeyPressed(KEY_LEFT_SHIFT)) {
             camera.target = {0,0,-90}; player.playerPOS = initCameraSettings.camPosition;
         }
-
         MovePlayer(player, 30);
         PlayerJump(player, jumpHeight, fallSpeed, GROUND);
-        
-        if (IsKeyPressed(KEY_Q)) {}
-        // Eh, maybe later interpolate between points and movement in MovePlayer
-        // tilt down is difference between pos.y target pos.y offsets, so pos>tar y "tilt down"
-        // want x and z cosntant 
 
         BeginDrawing();
         //BACKGROUND

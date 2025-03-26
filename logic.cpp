@@ -13,8 +13,6 @@ void ResetPlayer(Player &player)
     player.playerPOS = {0, 1, 0};
 }
 
-
-
 adjustedMessage2D AdjustMessage(const worldMessage &details)
 {
     const Vector3 worldPOS{
@@ -32,9 +30,7 @@ adjustedMessage2D AdjustMessage(const worldMessage &details)
     return message;
 }
 
-
-
-void GroundFallThroughProtection(Vector3& target, Vector3& ground, int offset)
+void GroundCollision(Vector3& target, Vector3& ground, int offset)
 {
     // BOTTOM
     if (target.y < ground.y) {
