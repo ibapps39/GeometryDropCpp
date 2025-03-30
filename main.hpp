@@ -3,6 +3,7 @@
 // Include necessary libraries
 #include "raylib.h"  // For Raylib types and functions
 #include "raymath.h" // For Raymath functions
+#include <stdio.h>
 
 // Constants
 #define FRAME_RATE 60
@@ -37,6 +38,7 @@ typedef struct
     Camera3D playerCamera;
     Vector3 previousPOS;    // Store previous position
     Vector3 velocity;       // Store velocity vector
+    float playerAngle;
 } Player;
 
 typedef struct
@@ -46,7 +48,8 @@ typedef struct
     const char* playerName;
     Camera3D playerCamera;
     Vector3 previousPOS;       // Store previous position
-    Vector3 playerVelocity;          // Store velocity vector
+    Vector3 playerVelocity;    // Store velocity vector
+    float playerAngle;
 } PlayerSettings;
 
 typedef struct BlockEntity {
@@ -135,7 +138,7 @@ void DrawPlayer(const Player &player);
 
 // Player Movement and Interaction
 void MoveCamera(Camera3D &camera);
-void MovePlayer(Player &player, const float units);
+void MovePlayer(Player &player, const float units, Camera &camera);
 void PlayerJump(Player &player, const float jumpHeight, const float fallSpeed, Vector3& ground);
 
 void UpdateCameraSettingsRuntime(Camera3D& camera, CameraSettings& settings);
@@ -144,3 +147,8 @@ void UpdateCameraSettingsRuntime(Camera3D& camera, CameraSettings& settings);
 void GroundCollision(Vector3& player, Vector3& GROUND, int GROUND_OFFSET);
 void BlockTest(BlockEntity& block, Player& player, const Vector3 InitialPOS, unsigned char t);
 void BlockCollision(BlockEntity& block, Vector3& p, float fallSpeed);
+void BlockCollision_alt(BlockEntity& block, Vector3& p, float fallSpeed);
+void debugDisplay(const char* dtext, Camera& camera);
+void debugDisplay(const char* dtexts[], Camera& camera);
+void debugDisplay(const char* dtext, Camera& camera, int posY);
+void MOUSE_LOCK(int desiredPositionX, int desiredPositionY);

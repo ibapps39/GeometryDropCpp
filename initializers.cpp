@@ -44,6 +44,7 @@ void InitZeroPlayer(Player& player)
     player.previousPOS = {0};
     player.playerPOS = {0};
     player.velocity = {0};
+    player.playerAngle = 0;
 }
 void InitPlayer(Player& player, PlayerSettings settings)
 {
@@ -53,6 +54,7 @@ void InitPlayer(Player& player, PlayerSettings settings)
     player.playerPOS = settings.playerPOS;
     player.previousPOS = settings.playerPOS;
     player.velocity = settings.playerVelocity;
+    player.playerAngle = settings.playerAngle;
 }
 
 Camera3D Create3DCamera()

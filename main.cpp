@@ -34,7 +34,7 @@ int main()
     player.playerPOS = {0, 3, 0};
     camera.target = {0,0,-90};
 
-    Vector3 BlockInitialPOS = {0, -2, -10};
+    Vector3 BlockInitialPOS = {0, 0, -10};
     BlockEntity block {
         .size = 5,
         .blockColor = BLACK,
@@ -42,18 +42,19 @@ int main()
         .blockPreviousPosition = BlockInitialPOS,
         .blockCurrentPosition = BlockInitialPOS
     };
-
-    static int lockMouse = 100; 
-    static unsigned char blockTimer = 0;
+    // FIXES cursor going crazy
+    DisableCursor();
     while (!WindowShouldClose())
     {
-        blockTimer++;
-        if (lockMouse > 0) { camera.target = {0,0,-90}; lockMouse--;} // Lock Mouse should be a function
+        float dist = Vector3Distance(block.blockCurrentPosition, player.playerPOS);
+        const char* s = TextFormat("current up: %.2f", camera.up);
+        
         UpdateCamera(&camera, CAMERA_FIRST_PERSON);
         camera.position = player.playerPOS;
         GroundCollision(player.playerPOS, GROUND, GROUND_OFFSET);
         //BlockTest(block, player, block.blockInitialPosition, blockTimer);
         BlockCollision(block, player.playerPOS, fallSpeed);
+        //BlockCollision_alt(block, player.playerPOS, fallSpeed);
 
         
         //Contain(camera.position, BOX, GROUND);
@@ -62,7 +63,8 @@ int main()
         if (IsKeyPressed(KEY_Q) && IsKeyPressed(KEY_LEFT_SHIFT)) {
             camera.target = {0,0,-90}; player.playerPOS = initCameraSettings.camPosition;
         }
-        MovePlayer(player, 30);
+        if (IsKeyPressed(KEY_J)) player.playerPOS = block.blockCurrentPosition;
+        MovePlayer(player, 30, camera);
         PlayerJump(player, jumpHeight, fallSpeed, GROUND);
 
         BeginDrawing();
@@ -83,11 +85,13 @@ int main()
         // UI AREA
         int fontS = 20;
         Color safetyFontColor = BLACK;
+        debugDisplay(s, camera, 300);
         DrawText(TextFormat("CAM Target: %f, %f, %f", camera.target.x, camera.target.y, camera.target.z), 100, 100, fontS, safetyFontColor);
         DrawText(TextFormat("CAM POS: %f, %f, %f", camera.position.x, camera.position.y, camera.position.z), 100, 100+fontS, fontS, safetyFontColor);
         DrawText(TextFormat("CAM UP: %f, %f, %f", camera.up.x, camera.up.y, camera.up.z), 100, 100+fontS*2, fontS, safetyFontColor);
         DrawText(TextFormat("CAM FOV: %f", camera.fovy), 100, 100+fontS*3, fontS, safetyFontColor);
         DrawText(TextFormat("PLAYER POS: %f, %f, %f", player.playerPOS.x, player.playerPOS.y, player.playerPOS.z), 100, 100+fontS*5, fontS, safetyFontColor);
+        
         EndDrawing();
     }
 

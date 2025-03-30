@@ -130,14 +130,15 @@ void DrawCameraInfo(const Camera3D &camera, const Player &player)
 
 void debugDisplay(const char* dtext, Camera& camera)
 {
-    // Vector3& cpos = camera.position;
-    // Vector3 tpos = 
-    // {
-    //     cpos.x,
-    //     cpos.y,
-    //     cpos.z
-    // };
-    // Vector2 wpos = GetWorldToScreen(tpos, camera);
-    //int t_int = MeasureText(dtext, 20);
     DrawText(TextFormat("%s", dtext), 100, 100, 20, BLACK);
+}
+void debugDisplay(const char* dtext, Camera& camera, int posY)
+{
+    DrawText(TextFormat("%s", dtext), 100, posY, 20, BLACK);
+}
+void debugDisplay(const char* dtexts[], Camera& camera)
+{
+    for (size_t i = 0; i<sizeof(dtexts)/sizeof(dtexts[0]); i++){
+        DrawText(TextFormat("%s", dtexts[i]), 100, 100+(100*i)+20, 20, BLACK);
+    }
 }
