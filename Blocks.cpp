@@ -50,12 +50,31 @@ void BlockCollision(BlockEntity &block, Vector3 &p, float fallSpeed)
             p.y += fallSpeed;
         }
     }
+    // should we specify/check that p.y is also between y_area_MIN && y_area_MAX?
+    // bool checkSides = (dist <= block.size) && (p.y <= y_area_MAX) && (p.y >= y_area_MIN);
+    // if (checkSides) {}
     bool onBlockLeft = (p.x <= x_area_MIN && dist <= block.size);
     if (onBlockLeft)
     {
         p.x -= 1.0;
     }
-    DrawText(TextFormat("dist: %.2f", dist), 200, 600, 20, GREEN);
+    bool onBlockRight = (p.x >= x_area_MAX && dist <= block.size);
+    if (onBlockRight)
+    {
+        p.x += 1.0;
+    }
+
+    bool onBlockFront = (p.z >= z_area_MAX) && (dist <= block.size);
+    if (onBlockFront)
+    {
+        p.z += 1.0;
+    }
+    bool onBlockBack = (p.z <= z_area_MIN) && (dist <= block.size);
+    if (onBlockBack)
+    {
+        p.z -= 1.0;
+    }
+    
 }
 void BlockCollision_alt(BlockEntity &block, Vector3 &p, float fallSpeed)
 {

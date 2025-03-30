@@ -44,9 +44,17 @@ int main()
     };
     // FIXES cursor going crazy
     DisableCursor();
+    static int timer = 5;
     while (!WindowShouldClose())
     {
-        float dist = Vector3Distance(block.blockCurrentPosition, player.playerPOS);
+        // FIXES cursor going crazy
+        Vector2 m = {GetMouseDelta().x, GetMouseDelta().y};
+        if (((m.x > 11 || m.x < -11) || (m.y > 11 || m.y < -11)) && timer > 0) 
+        {
+            SetMousePosition(GetScreenWidth()/2, GetScreenHeight()/2); 
+            timer--;
+        } 
+        
         const char* s = TextFormat("current up: %.2f", camera.up);
         
         UpdateCamera(&camera, CAMERA_FIRST_PERSON);
@@ -91,7 +99,8 @@ int main()
         DrawText(TextFormat("CAM UP: %f, %f, %f", camera.up.x, camera.up.y, camera.up.z), 100, 100+fontS*2, fontS, safetyFontColor);
         DrawText(TextFormat("CAM FOV: %f", camera.fovy), 100, 100+fontS*3, fontS, safetyFontColor);
         DrawText(TextFormat("PLAYER POS: %f, %f, %f", player.playerPOS.x, player.playerPOS.y, player.playerPOS.z), 100, 100+fontS*5, fontS, safetyFontColor);
-        
+
+
         EndDrawing();
     }
 
