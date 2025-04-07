@@ -1,5 +1,10 @@
 #pragma once
 #include "main.hpp"
+
+    // DEBUG
+    const char* debugMessages[MAX_DEBUG_MESSAGES];
+    int debugMessagesCount = 0;
+    //
 void UpdateCameraSettingsRuntime(Camera3D& camera, CameraSettings& settings)
 {
     // Check for input to modify camera settings
@@ -128,17 +133,35 @@ void DrawCameraInfo(const Camera3D &camera, const Player &player)
     GetPlayerInfo(player);
 }
 
-void debugDisplay(const char* dtext, Camera& camera)
+void DrawDebugMessages()
 {
-    DrawText(TextFormat("%s", dtext), 100, 100, 20, BLACK);
+    // DrawText(debugMessages[0], 100, 100, 20, BLACK);
+    // DrawText(debugMessages[1], 100, 130, 20, BLACK);
+    // DrawText(debugMessages[2], 100, 160, 20, BLACK);
+    // DrawText(debugMessages[3], 100, 190, 20, BLACK);
+    // DrawText(debugMessages[4], 100, 220, 20, BLACK);
+    int yPOS = 100;
+    int fontSize = 20;
+    for (int i = 0; i < debugMessagesCount; i++)
+    {
+        DrawText(debugMessages[i], 100, yPOS, fontSize, BLACK);
+        yPOS += fontSize;
+    }
 }
-void debugDisplay(const char* dtext, Camera& camera, int posY)
+
+void AddDebugMessage(const char* message, int position)
 {
-    DrawText(TextFormat("%s", dtext), 100, posY, 20, BLACK);
-}
-void debugDisplay(const char* dtexts[], Camera& camera)
-{
-    for (size_t i = 0; i<sizeof(dtexts)/sizeof(dtexts[0]); i++){
-        DrawText(TextFormat("%s", dtexts[i]), 100, 100+(100*i)+20, 20, BLACK);
+    // NEW
+    if(debugMessages[position] == nullptr)
+    {
+        printf("\ndebugMessages[position] == nullptr:\nBEGIN:\n message: {\n%s\n}\n position: %i \nEND\n", message, position);
+        debugMessages[position] = message;
+        debugMessagesCount++;
+    } else 
+    // JUST INSERT
+    if(debugMessages[position] != nullptr)
+    {
+        printf("\ndebugMessages[position] != nullptr:\nBEGIN:\n message: {\n%s\n}\n position: %i \nEND\n", message, position);
+        debugMessages[position] = message;
     }
 }

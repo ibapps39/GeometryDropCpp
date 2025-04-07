@@ -1,0 +1,2 @@
+# Bugs
+- A DrawText(TextFormat(...)) *anywhere* apparently overrides and overwrites the char buffer. But NOT the position coordinates of DrawDebugMessages()? It just ended up inheriting the positions of messages in BlockCollisions but using the message in main. Despite no call to AddDebugMessages() in Main.

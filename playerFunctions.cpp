@@ -59,8 +59,6 @@ void MovePlayer(Player &player, const float units, Camera &camera)
         player.playerPOS.z += strafeDirectionZ * deltaOffset; // Strafe right
     }
     
-    DrawText(TextFormat("currentAngle degrees %.2f", currentAngle * (180/PI)), 200, 600, 20, GREEN);
-    // Note: There appears to be a truncated DrawText call at the end
 }
 
 

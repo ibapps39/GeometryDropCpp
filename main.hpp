@@ -3,7 +3,10 @@
 // Include necessary libraries
 #include "raylib.h"  // For Raylib types and functions
 #include "raymath.h" // For Raymath functions
+
+// For Error Handling
 #include <stdio.h>
+
 
 // Constants
 #define FRAME_RATE 60
@@ -52,13 +55,28 @@ typedef struct
     float playerAngle;
 } PlayerSettings;
 
+typedef enum BLOCK_TYPE {
+    TRI_BLOCK,
+    CUBE,
+    RAMP,
+    FOUR_BY_FOUR
+} BLOCK_TYPE;
+
 typedef struct BlockEntity {
     unsigned char size;
     Color blockColor;
-    const Vector3 blockInitialPosition;
+    Vector3 blockInitialPosition;
     Vector3 blockPreviousPosition;
     Vector3 blockCurrentPosition;
+    BLOCK_TYPE blockType;
 } BlockEntity;
+
+// Global block list
+typedef struct {
+    BlockEntity* blocks;    // Array of blocks
+    int count;              // Current number of blocks
+    int capacity;           // Maximum number of blocks that can be rendered
+} BlockList;
 
 // Camera settings for player and its camera
 typedef struct
@@ -95,6 +113,17 @@ typedef struct AdjustedMessage2D
     const char *formattedText;
     int measuredText;
 } adjustedMessage2D;
+
+// DEBUG
+#define MAX_DEBUG_MESSAGES 10
+extern const char* debugMessages[MAX_DEBUG_MESSAGES];
+//
+// void debugDisplay(const char* dtext, Camera& camera);
+// void debugDisplay(const char* dtexts[], Camera& camera);
+// void debugDisplay(const char* dtext, Camera& camera, int posY);
+
+void DrawDebugMessages();
+void AddDebugMessage(const char* message, int position);
 
 // Initializers
 #if HAS_UNIQUE > 0
@@ -148,7 +177,20 @@ void GroundCollision(Vector3& player, Vector3& GROUND, int GROUND_OFFSET);
 void BlockTest(BlockEntity& block, Player& player, const Vector3 InitialPOS, unsigned char t);
 void BlockCollision(BlockEntity& block, Vector3& p, float fallSpeed);
 void BlockCollision_alt(BlockEntity& block, Vector3& p, float fallSpeed);
-void debugDisplay(const char* dtext, Camera& camera);
-void debugDisplay(const char* dtexts[], Camera& camera);
-void debugDisplay(const char* dtext, Camera& camera, int posY);
+
 void MOUSE_LOCK(int desiredPositionX, int desiredPositionY);
+
+void DrawBlock(BlockEntity block, Vector3 pos);
+void DrawTriBlock(Vector3 pos, unsigned char size);
+void DrawFourByFour(Vector3 pos, unsigned char size);
+
+
+
+// void InitBlockList(int initialCapacity);
+// void FreeBlockList(BlockList* list);
+// void AddBlockToList(BlockList* list, BlockEntity block);
+// void RemoveBlockAtIndex(BlockList* list, int index);
+// void RemoveBlockAtPosition(BlockList* list, Vector3 position, float threshold = 0.5f);
+// void UpdateBlocks(BlockList* list, Player& player, unsigned char timer);
+// void DrawBlockList(BlockList* list);
+// void CreateAndAddBlock(BlockList* list, Vector3 position, unsigned char size, BLOCK_TYPE type, Color color);
