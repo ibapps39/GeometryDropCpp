@@ -154,14 +154,14 @@ void AddDebugMessage(const char* message, int position)
     // NEW
     if(debugMessages[position] == nullptr)
     {
-        printf("\ndebugMessages[position] == nullptr:\nBEGIN:\n message: {\n%s\n}\n position: %i \nEND\n", message, position);
+        //printf("\ndebugMessages[position] == nullptr:\nBEGIN:\n message: {\n%s\n}\n position: %i \nEND\n", message, position);
         debugMessages[position] = message;
         debugMessagesCount++;
     } else 
     // JUST INSERT
     if(debugMessages[position] != nullptr)
     {
-        printf("\ndebugMessages[position] != nullptr:\nBEGIN:\n message: {\n%s\n}\n position: %i \nEND\n", message, position);
+        //printf("\ndebugMessages[position] != nullptr:\nBEGIN:\n message: {\n%s\n}\n position: %i \nEND\n", message, position);
         debugMessages[position] = message;
     }
 }

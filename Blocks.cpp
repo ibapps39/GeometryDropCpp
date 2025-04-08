@@ -41,6 +41,10 @@ void BlockCollision(BlockEntity &block, Vector3 &p, float fallSpeed)
     float dist = Vector3Distance(p, block.blockCurrentPosition);
     // You're touching the block if your 
     bool touchingBlock;
+    // bool onBlockLeft;
+    // bool onBlockRight;
+    // bool onBlockFront;
+    // bool onBlockBack;
 
     if (block.blockType == CUBE)
     {
@@ -57,9 +61,7 @@ void BlockCollision(BlockEntity &block, Vector3 &p, float fallSpeed)
     if (block.blockType == TRI_BLOCK)
     {
         // DrawCube(pos, size, size, size, RED);
-        // //Back
         // DrawCube({pos.x, pos.y, pos.z-size}, size, size, size, YELLOW);
-        // //Diagonal
         // DrawCube({pos.x, pos.y, pos.z-(size*2)}, size, size, size, BLUE);
         Vector3 pos = blockCenterRef;
         Vector3 secondBlock = {pos.x, pos.y, pos.z-block.size};
@@ -68,32 +70,38 @@ void BlockCollision(BlockEntity &block, Vector3 &p, float fallSpeed)
         zBoundsMax = (pos.z+blockCenterRadius)+fault_t;
         zBoundsMin = (thirdBlock.z-(thirdBlock.z/2)) - fault_t;
 
-        // So, probs couild assume for just one y (pos.y+blockCenterRadius) BUT, just to be safe...
+        // So, probs could assume for just one y (pos.y+blockCenterRadius) BUT, just to be safe...
         // PROFILE THAT LATER
         yBoundsMax = 
         ( 
-            ((pos.y+blockCenterRadius) + fault_t)           ||
-            ((secondBlock.y+blockCenterRadius) + fault_t)   ||
-            ((thirdBlock.y+blockCenterRadius) + fault_t) 
+            ((pos.y+blockCenterRadius) + fault_t)           
+            // ||
+            // ((secondBlock.y+blockCenterRadius) + fault_t)   ||
+            // ((thirdBlock.y+blockCenterRadius) + fault_t) 
         );
 
         yBoundsMin = 
         ( 
-            ((pos.y-blockCenterRadius) - fault_t)           ||
-            ((secondBlock.y-blockCenterRadius) - fault_t)   ||
+            // ((pos.y-blockCenterRadius) - fault_t)           
+            // ||
+            // ((secondBlock.y-blockCenterRadius) - fault_t)   
+            // ||
             ((thirdBlock.y-blockCenterRadius) - fault_t) 
         );
         
         xBoundsMax = 
         ( 
-            (   (pos.x+blockCenterRadius) + fault_t )           ||
-            (   (secondBlock.x+blockCenterRadius) + fault_t )   ||
+            (   (pos.x+blockCenterRadius) + fault_t )           
+            ||
+            (   (secondBlock.x+blockCenterRadius) + fault_t )   
+            ||
             (   (thirdBlock.x+blockCenterRadius) + fault_t  ) 
         );
 
         xBoundsMin = 
         ( 
-            (   (pos.x-blockCenterRadius) - fault_t         )   ||
+            (   (pos.x-blockCenterRadius) - fault_t         )   
+            ||
             (   (secondBlock.x-blockCenterRadius) - fault_t )   ||
             (   (thirdBlock.x-blockCenterRadius) - fault_t  ) 
         );
@@ -105,69 +113,34 @@ void BlockCollision(BlockEntity &block, Vector3 &p, float fallSpeed)
             (   Vector3Distance(p, thirdBlock)  <= block.size + fault_t  )
         );
     }
-    // if (block.blockType == RAMP)
-    // {
-    //     float zBoundsMax = (blockCenterRef.z + blockCenterRadius) + fault_t;
-    //     float zBoundsMin = (blockCenterRef.z - blockCenterRadius) - fault_t;
-        
-    //     float yBoundsMax = (blockCenterRef.y + block.size) + fault_t;
-    //     float yBoundsMin = (blockCenterRef.y) - fault_t;
-        
-    //     float xBoundsMax = (blockCenterRef.x + blockCenterRadius) + fault_t;
-    //     float xBoundsMin = (blockCenterRef.x - blockCenterRadius) - fault_t;
-    // }
-    // if (block.blockType == FOUR_BY_FOUR)
-    // {
-    //     float zBoundsMax = (blockCenterRef.z + blockCenterRadius) + fault_t;
-    //     float zBoundsMin = (blockCenterRef.z - blockCenterRadius) - fault_t;
-        
-    //     float yBoundsMax = (blockCenterRef.y + block.size) + fault_t;
-    //     float yBoundsMin = (blockCenterRef.y) - fault_t;
-        
-    //     float xBoundsMax = (blockCenterRef.x + blockCenterRadius) + fault_t;
-    //     float xBoundsMin = (blockCenterRef.x - blockCenterRadius) - fault_t;
-    // }
+    bool onBlockTop =   (p.y >= yBoundsMax && touchingBlock);
+    bool onBlockLeft =  (p.x <= xBoundsMin && touchingBlock);
+    bool onBlockRight = (p.x >= xBoundsMax && touchingBlock);
+    bool onBlockFront = (p.z >= zBoundsMax && touchingBlock);
+    bool onBlockBack =  (p.z <= zBoundsMin && touchingBlock);
 
-    // triblock's z - 
-    // triBlock_2 = {}
-    // triBlock_3
-
-    // Vector3Distance(p, block.blockCurrentPosition) || 
-    // Vector3Distance(p, block.blockCurrentPosition-block.blockCurrentPosition) || 
-    // Vector3Distance(p, block.blockCurrentPosition-block.blockCurrentPosition-block.blockCurrentPosition)
-
-    if (touchingBlock)
+    if (onBlockTop)
     {
-        bool onBlockTop = (p.y >= yBoundsMax);
-        if (onBlockTop)
-        {
-            p.y += fallSpeed;
-        }
+        p.y += fallSpeed;
     }
-    // should we specify/check that p.y is also between yBoundsMin && yBoundsMax?
-    // bool checkSides = (dist <= block.size) && (p.y <= yBoundsMax) && (p.y >= yBoundsMin);
-    // if (checkSides) {}
-    bool onBlockLeft =  (p.x <= xBoundsMin && touchingBlock );
     if (onBlockLeft)
     {
         p.x -= 1.0;
     }
-    bool onBlockRight = (p.x >= xBoundsMax && touchingBlock);
     if (onBlockRight)
     {
         p.x += 1.0;
     }
-
-    bool onBlockFront = (p.z >= zBoundsMax && touchingBlock);
     if (onBlockFront)
     {
         p.z += 1.0;
     }
-    bool onBlockBack = (p.z <= zBoundsMin && touchingBlock);
+    
     if (onBlockBack)
     {
         p.z -= 1.0;
     }
+
         const char* mpos = TextFormat("touchingBlock: %i", touchingBlock);
         const char* mpos2 = TextFormat("block.blockCurrentPositionPOS: %.2f, %.2f, %.2f", block.blockCurrentPosition.x, block.blockCurrentPosition.y, block.blockCurrentPosition.z);
         const char* mpos3 = TextFormat("pPOS: %.2f, %.2f, %.2f", p.x, p.y, p.z);
@@ -175,7 +148,6 @@ void BlockCollision(BlockEntity &block, Vector3 &p, float fallSpeed)
         AddDebugMessage(mpos, 0); // currentCount
         AddDebugMessage(mpos2, 1); // currentCount 
         AddDebugMessage(mpos3, 2); // currentCount 
-
 }
 void DrawTriBlock(Vector3 pos, unsigned char size)
 {
